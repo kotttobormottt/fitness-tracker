@@ -12,16 +12,16 @@ class InfoMessage:
     speed: float
     calories: float
 
-    INFO_MESSAGE = (
-        "Тип тренировки: {training_type}; "
-        "Длительность: {duration:.3f} ч.; "
-        "Дистанция: {distance:.3f} км; "
-        "Ср. скорость: {speed:.3f} км/ч; "
-        "Потрачено ккал: {calories:.3f}."
-    )
-
     def get_message(self) -> str:
-        return self.INFO_MESSAGE.format(
+
+        INFO_MESSAGE = (
+            "Тип тренировки: {training_type}; "
+            "Длительность: {duration:.3f} ч.; "
+            "Дистанция: {distance:.3f} км; "
+            "Ср. скорость: {speed:.3f} км/ч; "
+            "Потрачено ккал: {calories:.3f}."
+        )
+        return INFO_MESSAGE.format(
             training_type=self.training_type,
             duration=self.duration,
             distance=self.distance,
@@ -35,6 +35,7 @@ class Training:
 
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
+    HOUR: int = 60
     action: int
     duration: float
     weight: float
@@ -63,7 +64,7 @@ class Training:
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
 
-        raise NotImplementedError((self.__class__.__name__))
+        raise NotImplementedError
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
@@ -97,7 +98,7 @@ class Running(Training):
             )
             * self.weight
             / self.M_IN_KM
-            * (self.duration * 60)
+            * (self.duration * self.HOUR)
         )
         return spent_calories
 
@@ -124,7 +125,7 @@ class SportsWalking(Training):
             + (self.get_mean_speed() ** 2 // self.height)
             * self.CALORIE_MULTIPLIER_2
             * self.weight
-        ) * (self.duration * 60)
+        ) * (self.duration * self.HOUR)
         return spent_calories
 
 
